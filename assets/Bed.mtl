@@ -1,0 +1,37 @@
+# Blender MTL File: 'Bed.blend'
+# Material Count: 3
+
+newmtl Bed_Frame
+Ns 35.999996
+Ka 1.000000 1.000000 1.000000
+Kd 0.110689 0.055850 0.011226
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\Bed Frame Texture.png
+map_Ns textures\Bed Frame Roughness.png
+refl textures\Bed Frame Metalness.png
+
+newmtl Bed_Mattress
+Ns 35.999996
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\Bed Mattress Texture.png
+
+newmtl Bed_Pillow
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\Bed Pillow Texture.png

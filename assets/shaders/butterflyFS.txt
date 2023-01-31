@@ -1,0 +1,29 @@
+#version 330 core
+
+smooth in vec2 TexCoords;
+out vec4 color;
+
+uniform sampler2D texture_diffuse1;
+uniform float time;
+const ivec2 pattern = ivec2(10, 2);
+//uniform float frameDuration = 0.0f;
+
+vec4 sampleTexture(int frame)
+{
+	vec2 dims = vec2(1.0) / vec2(pattern);
+
+	//vec2 CoordBase= TexCoords /vec2(pattern);
+	
+	vec2 offset = dims * vec2(frame % pattern.x, frame / pattern.y);
+	vec2 newTexCoords = TexCoords * dims + offset;
+	return texture(texture_diffuse1, newTexCoords);
+}
+
+void main()
+{
+	int frame = int(time / 0.2);
+	vec4 texColor = sampleTexture(frame);
+	if (texColor.a < 0.1)
+		discard;
+	color = texColor;
+}

@@ -1,0 +1,15 @@
+# Blender MTL File: 'CouchChairCoffeeTable.blend'
+# Material Count: 1
+
+newmtl Couch
+Ns 323.999994
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2 
+map_Kd textures\Couch_Base_Color.png
+map_Ka textures\Couch_Base_Color.png
+map_Ns textures\Couch_Normal_OpenGL.png

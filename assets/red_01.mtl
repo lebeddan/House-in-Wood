@@ -1,0 +1,15 @@
+# Blender MTL File: 'low_poly_characters_1_06_Squid_Game.blend'
+# Material Count: 1
+
+newmtl red
+Ns 179.999996
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.200000 0.200000 0.200000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\red_Base_Color.png
+map_Ka textures\red_Base_Color.png
+map_Ks textures\red_Base_Color.png

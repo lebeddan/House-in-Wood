@@ -1,0 +1,278 @@
+#version 330 core
+out vec4 FragColor;
+
+struct Material {
+    sampler2D diffuse;
+    sampler2D specular;
+    float shininess;
+}; 
+
+// Structure for my materials
+struct Mat{
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+
+    float shininess;
+};
+
+struct DirLight {
+    vec3 direction;
+	
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct PointLight {
+    vec3 position;
+    vec3 direction;
+    
+    float Kc;
+    float Kl;
+    float Kq;
+
+    float cutOff;
+
+	
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+
+#define POINT_LIGHTS 15
+
+in vec3 FragPos;
+in vec3 Normal;
+in vec2 TexCoords;
+
+// Light/Material parametrs 
+uniform vec3 viewPos;
+uniform vec3 cameraDir;
+uniform float cutOffLighter;
+uniform DirLight dirLight;
+uniform PointLight pointLights[POINT_LIGHTS];
+uniform Material material;
+uniform Mat material1;
+
+// Draw Windows with low alpha
+uniform bool draw_windows;
+
+// Use parametrs for materials in frag shader
+uniform bool hardcode;
+
+// Enable/Disable fog, lighter
+uniform bool fogEnable;
+uniform bool lighterEnable;
+
+// Function prototypes
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
+vec3 CalcLighter(float cutOffLighter, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 viewPos, vec3 cameraDir);
+
+void main()
+{    
+    // Fog
+    float fog_maxDist = 19.0;
+    float fog_minDist = 0.1;
+    vec4 fog_color = vec4(0.4, 0.4, 0.4, 1.0);
+    float fog_factor;
+
+    // Linear calc fog
+    /*
+    float dist = length(FragPos.xyz);
+    float fog_factor = (fog_maxDist - dist) / (fog_maxDist - fog_minDist);
+    */
+
+   // Exponenical calc fog
+    if (fogEnable)
+    {
+        float dist = length(FragPos - viewPos);
+        vec3 camFrag = FragPos - viewPos;
+        fog_factor = exp(-(0.3 * dist));
+        fog_factor = clamp(fog_factor, 0.0, 1.0);
+    }
+    
+    // Not used
+   // float fog_factor = 0.3 * exp(-viewPos.z * 0.4) * ( 1.0 - exp( -dist*camFrag.z*0.4 ) ) / (camFrag.z);
+   // fog_factor = clamp(fog_factor, 0.0, 1.0);
+
+
+    vec3 norm = normalize(Normal);
+    vec3 viewDir = normalize(viewPos - FragPos);
+    
+    // Calc directional light
+    vec3 result = CalcDirLight(dirLight, norm, viewDir);
+
+    // Calc point light
+    for(int i = 0; i < POINT_LIGHTS; i++)
+        result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
+    
+    // Calc spot light
+    if (lighterEnable)
+        result += CalcLighter(cutOffLighter, norm, FragPos, viewDir, viewPos, cameraDir);
+    
+    
+    if (draw_windows)
+        FragColor = texture(material.diffuse, TexCoords) * vec4(result, 0.6);
+    else
+        FragColor = texture(material.diffuse, TexCoords) * vec4(result, 1.0);
+    
+    if (fogEnable)
+    {
+        if (draw_windows)
+            FragColor = mix(fog_color, texture(material.diffuse, TexCoords) * vec4(result, 0.6), fog_factor);
+        else
+            FragColor = mix(fog_color, texture(material.diffuse, TexCoords) * vec4(result, 1.0), fog_factor);
+    }
+    
+ 
+    
+}
+
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+{
+    vec3 lightDir = normalize(-light.direction);
+    
+    // Diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // Specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    
+    // Use texture materials
+    /*
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    */
+
+    // Use my materials
+    vec3 ambient, diffuse, specular;
+    float spec;
+   if (hardcode)
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
+        ambient = light.ambient * vec3(0.2, 0.2, 0.2);
+        diffuse = light.diffuse * diff * vec3(0.8, 0.8, 0.8);
+        specular = light.specular * spec * vec3(0.3, 0.3, 0.3);
+    }
+    else
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), material1.shininess);
+        ambient = light.ambient * material1.diffuse;
+        diffuse = light.diffuse * diff * material1.diffuse;
+        specular = light.specular * spec * material1.specular;
+    }
+    
+    
+    return (ambient + diffuse + specular);
+}
+
+vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+    vec3 lightDir = normalize(fragPos-light.position);
+    
+    // Diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // Specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+   // float spec = pow(max(dot(viewDir, reflectDir), 0.0), material1.shininess);
+    
+    // Attenuation
+    float distance = length(light.position - fragPos);
+    
+    float Fa = 1.0 / (light.Kc + light.Kl * distance + light.Kq * (distance * distance));    
+    
+     // Use texture materials
+    /*
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    */
+
+    // Use my materials
+    vec3 ambient, diffuse, specular;
+    float spec;
+    if (hardcode)
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);
+        ambient = light.ambient * vec3(0.2, 0.2, 0.2);
+        diffuse = light.diffuse * diff * vec3(0.8, 0.8, 0.8);
+        specular = light.specular * spec * vec3(0.3, 0.3, 0.3);
+    }
+    else
+    {
+        spec = pow(max(dot(viewDir, reflectDir), 0.0), material1.shininess);
+        ambient = light.ambient * material1.diffuse;
+        diffuse = light.diffuse * diff * material1.diffuse;
+        specular = light.specular * spec * material1.specular;
+    }
+    
+    
+    // Spotlight intensity
+    float theta = dot(lightDir, light.direction);   
+    float intensity = 0.0;
+    if (theta > light.cutOff)
+    {
+        intensity = (1.0 - (1.0 - theta) * 1.0 / (1.0 - light.cutOff));
+    }
+    
+    ambient *= Fa * intensity;
+    diffuse *= Fa * intensity;
+    specular *= Fa * intensity;
+     
+    return (ambient + diffuse + specular);
+}
+
+vec3 CalcLighter(float cutOffLighter, vec3 normal, vec3 fragPos, vec3 viewDir, vec3 viewPos, vec3 cameraDir)
+{
+    // Set up lighter
+    float shininess = 32.0;
+    vec3 matAmbient = vec3(0.2, 0.2, 0.2);
+    vec3 matDiffuse = vec3(0.8, 0.8, 0.8);
+    vec3 matSpecular = vec3(0.3, 0.3, 0.3);
+
+    vec3 lightAmbient = vec3(0.0, 0.0, 0.0);
+    vec3 lightDiffuse = vec3(1.0, 1.0, 1.0);
+    vec3 lightSpecular = vec3(1.0, 1.0, 1.0);
+
+    float Kc = 1.0;
+    float Kl = 1.09;
+    float Kq = 5.32;
+
+
+    vec3 lightDir = normalize(viewPos-fragPos);
+    
+    // Diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    
+    // Specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    
+    // Attenuation
+    float distance = length(viewPos - fragPos);   
+    float Fa = 1.0 / (Kc + Kl * distance + Kq * (distance * distance));    
+    
+    vec3 ambient = lightAmbient * matDiffuse;
+    vec3 diffuse = lightDiffuse * diff * matDiffuse;
+    vec3 specular = lightSpecular * spec * matSpecular;
+    
+    // spotlight intensity
+    float theta = dot(lightDir, normalize(-cameraDir)); 
+    float cutOff = cos(radians(cutOffLighter/2));
+    float intensity = 0.0;
+    if (theta > cutOff)
+    {
+        intensity = (1.0 - (1.0 - theta) * 1.0 / (1.0 - cutOff));
+    }
+    
+    ambient *= Fa * intensity;
+    diffuse *= Fa * intensity;
+    specular *= Fa * intensity;
+     
+    return (ambient + diffuse + specular);
+}

@@ -1,0 +1,79 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 14.02.2018 14:31:28
+
+newmtl brown_Ground
+	Ns 50.0000
+	Ni 1.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\brown_Ground.jpg
+	map_Kd textures\brown_Ground.jpg
+	map_bump textures\brown_Ground_bp.jpg
+	bump textures\brown_Ground_bp.jpg
+
+newmtl Diffenbachia_Leaf_02_front
+	Ns 50.0000
+	Ni 1.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\Diffenbachia_Leaf_02.jpg
+	map_Kd textures\Diffenbachia_Leaf_02.jpg
+	map_bump textures\Diffenbachia_Leaf_02_bp.jpg
+	bump textures\Diffenbachia_Leaf_02_bp.jpg
+
+newmtl Diffenbachia_Leaf_03_front
+	Ns 50.0000
+	Ni 1.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\Diffenbachia_Leaf_03.jpg
+	map_Kd textures\Diffenbachia_Leaf_03.jpg
+	map_bump textures\Diffenbachia_Leaf_03_bp.jpg
+	bump textures\Diffenbachia_Leaf_03_bp.jpg
+
+newmtl Diffenbachia_Leaf_01_front
+	Ns 50.0000
+	Ni 1.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 0.5000 0.5000 0.5000
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Ka textures\Diffenbachia_Leaf_01.jpg
+	map_Kd textures\Diffenbachia_Leaf_01.jpg
+	map_bump textures\Diffenbachia_Leaf_01_sp_bp.jpg
+	bump textures\Diffenbachia_Leaf_01_sp_bp.jpg
+
+newmtl White_Pot
+	Ns 50.0000
+	Ni 1.0000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5880 0.5880 0.5880
+	Kd 1.0000 0.9608 0.9294
+	Ks 0.0000 0.0000 0.0000
+	Ke 0.0000 0.0000 0.0000
+	map_Kd textures\WhitePlaster.jpg

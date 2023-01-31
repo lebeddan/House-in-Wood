@@ -1,0 +1,19 @@
+newmtl blinn2SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd textures\BaseColor.jpg
+bump -bm 0.01 textures\BaseColor.jpg 
+Ni 1.00
+Ks 0.00 0.00 0.00
+map_Ks textures\trash_Specf.jpg
+newmtl lambert8SG
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd textures\TR_VaseColor.jpg
+bump -bm 1.5 textures\TR_Normal.jpg 
+
+Ni 1.00

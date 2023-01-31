@@ -1,0 +1,25 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 02.10.2018 15:48:52
+
+newmtl wire_153228184
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.6000 0.8941 0.7216
+	Kd 0.6000 0.8941 0.7216
+	Ks 0.3500 0.3500 0.3500
+	map_Kd LeavesTropical0172_2_S.png
+	map_Ka LeavesTropical0172_2_S.png
+
+newmtl wire_177028149
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.6941 0.1098 0.5843
+	Kd 0.6941 0.1098 0.5843
+	Ks 0.3500 0.3500 0.3500
+	map_Kd wood-003_ash-european-2_r.jpg
